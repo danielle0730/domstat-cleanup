@@ -1,3 +1,11 @@
 # created by roxygenise
 
+export(BivariateReport)
+export(CategoricalTable)
+export(Fixed)
+export(FormatData)
+export(QuantitativeTable)
+export(TextTable)
+export(TrimP)
 export(UnivariateReport)
+export(VectorTable)
