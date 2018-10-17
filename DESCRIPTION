@@ -3,7 +3,7 @@ Title: Efficiently formatting and analyzing a data frame
 Version: 0.0.0.9000
 Authors@R: person("Sitaram", "Vangala", email = "svangala@mednet.ucla.edu", role = c("aut", "cre"))
 Description: Given a consistently formatted data dictionary, this package cleans up the entries and variables in the data frame for ease of analysis. Provided functions can return analysis results according to variable type in the form of report summaries. 
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.0)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
