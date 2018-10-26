@@ -30,6 +30,15 @@ BivariateReport <- function(data, dictionary, variable) {
           p[i] <- TrimP(p.value)
         }
       } else if(type == "Quantitative" & subtype == "Ratio"){
+        main.variable <- data[, output[i, "COL.1"]] + 1 
+        test <- tryCatch(anova(lm(log(main.variable) ~ stratifier)),
+                         error = function(error) "N/A",
+                         warning = function(warning) "N/A")
+        if (!("N/A" %in% test)) {
+          p.value <- anova(lm(main.variable ~ stratifier))[1, "Pr(>F)"]
+          p[i] <- TrimP(p.value)
+        }
+      } else if (type == "Quantitative" & subtype == "Interval"){
         main.variable <- data[, output[i, "COL.1"]]
         test <- tryCatch(anova(lm(main.variable ~ stratifier)),
                          error = function(error) "N/A",
