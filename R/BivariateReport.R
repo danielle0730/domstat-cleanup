@@ -17,18 +17,30 @@ BivariateReport <- function(data, dictionary, variable) {
     if (!is.na(output[i, "COL.1"]) & output[i, "COL.1"] != "") {
       type <- dictionary[which(dictionary[, "label"] == output[i, "COL.1"]),
                          "type"]
-      if (type == "Quantitative") {
+      
+    subtype <- dictionary[which(dictionary[, "label"] == output[i, "COL.1"]),
+                          "subtype"]
+      if (type == "Quantitative" & subtype == "Ordinal") {
         main.variable <- data[, output[i, "COL.1"]]
-        test <- tryCatch(wilcox.test(main.variable ~ stratifier),
+        test <- tryCatch(kruskal.test(main.variable ~ stratifier),
                          error = function(error) "N/A",
                          warning = function(warning) "N/A")
         if (!("N/A" %in% test)) {
-          p.value <- wilcox.test(main.variable ~ stratifier)[["p.value"]]
+          p.value <- kruskal.test(main.variable ~ stratifier)[["p.value"]]
+          p[i] <- TrimP(p.value)
+        }
+      } else if(type == "Quantitative" & subtype == "Ratio"){
+        main.variable <- data[, output[i, "COL.1"]]
+        test <- tryCatch(anova(lm(main.variable ~ stratifier)),
+                         error = function(error) "N/A",
+                         warning = function(warning) "N/A")
+        if (!("N/A" %in% test)) {
+          p.value <- anova(lm(main.variable ~ stratifier))[1, "Pr(>F)"]
           p[i] <- TrimP(p.value)
         }
       } else if (type %in% c("Categorical", "Vector")) {
         columns <- which(substr(colnames(data), 1, nchar(output[i, "COL.1"])) ==
-                           output[i, "COL.1"])
+                         output[i, "COL.1"])
         for (j in 1:length(columns)) {
           main.variable <- data[, columns[j]]
           tbl <- table(main.variable, stratifier)
